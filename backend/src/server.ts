@@ -1,4 +1,4 @@
-import express, {Request, type Response} from "express";
+import express, { Request, type Response } from "express";
 import { error } from "node:console";
 import { randomUUID } from "node:crypto";
 
@@ -7,21 +7,34 @@ const port = 3000
 
 app.use(express.json())
 
-app.get("/health", (_request: Request, response: Response) =>{
+app.get("/cliente", (_request: Request, response: Response) => {
+    try {
+
+        const res = await pool.query("SELECT * FROM  clientes")
+        console.log(res)
+
+        response.json(res.rows)
+    } catch (error) {
+        console.error(error);
+    }
+
+})
+
+app.get("/health", (_request: Request, response: Response) => {
     return response.json({
         status: "OK"
     })
 })
 
-interface CreateUserBody{
+interface CreateUserBody {
     name: string;
 
 }
 
 
-app.post("/users", (request: Request<object, object, CreateUserBody>, response: Response)=>{
+app.post("/users", (request: Request<object, object, CreateUserBody>, response: Response) => {
     const name = request.body.name?.trim()
-    if(!name) {
+    if (!name) {
         return response.status(400).json({
             error: "Name is requires"
         })
@@ -33,6 +46,6 @@ app.post("/users", (request: Request<object, object, CreateUserBody>, response: 
     })
 })
 
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log(`API rodando em http://localhost:${port}`)
 })

@@ -4,7 +4,7 @@ import pg from "pg"
 
 const { pool } = pg
 
-export cont pool = new pool()
+export cont pool = new pool( )
 
 pool.on("error", (error)) => {
     console.error(
